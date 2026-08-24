@@ -29,7 +29,7 @@ public class ExampleV1Controller : ControllerBase
     {
         var random = new Random();
 
-        await _plantTypeService.GetAllPlantTypes();
+        var plantTypes = await _plantTypeService.GetAllPlantTypes();
 
         return random.Next();
     }

@@ -1,7 +1,8 @@
+using Dapper;
 using Garden.DataAccess;
 using Garden.DataAccess.DataAccessObjects.Interfaces;
+using Garden.Models;
 using Garden.Services.Interfaces;
-using Dapper;
 
 namespace Garden.Services;
 
@@ -25,9 +26,12 @@ public class PlantTypeService : IPlantTypeService
     /// <summary>
     /// Get all plant types from the database.
     /// </summary>
-    public async Task GetAllPlantTypes()
+    /// <returns>A list containing all of the plant types.</returns>
+    public async Task<List<PlantType>> GetAllPlantTypes()
     {
         using var dbTransaction = _dbContext.DbConnection.BeginTransaction();
-        await _plantTypeDao.GetAllPlantTypes(dbTransaction);
+        var plantTypes = await _plantTypeDao.GetAllPlantTypes(dbTransaction);
+
+        return plantTypes;
     }
 }

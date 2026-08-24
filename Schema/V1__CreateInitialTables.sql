@@ -152,12 +152,18 @@ BEGIN
 			sunlight_need_id_preferred INT NOT NULL,
 			sunlight_need_id_tolerated INT,
 			water_need_id INT NOT NULL,
-			soil_ph_id_min NUMERIC NOT NULL,
-			soil_ph_id_max NUMERIC NOT NULL,
+			soil_ph_min NUMERIC NOT NULL,
+			soil_ph_max NUMERIC NOT NULL,
 			plant_family_id INT NOT NULL,
-			perenial BOOLEAN NOT NULL,
+			is_perennial BOOLEAN NOT NULL,
 			hardiness_zone_id_min INT NOT NULL,
-			hardiness_zone_id_max INT NOT NULL
+			hardiness_zone_id_max INT NOT NULL,
+			CONSTRAINT fk_plant_type__sunlight_need_id_preferred FOREIGN KEY(sunlight_need_id_preferred) REFERENCES sunlight_need(id),
+			CONSTRAINT fk_plant_type__sunlight_need_id_tolderated FOREIGN KEY(sunlight_need_id_tolerated) REFERENCES sunlight_need(id),
+			CONSTRAINT fk_plant_type__water_need_id FOREIGN KEY(water_need_id) REFERENCES water_need(id),
+			CONSTRAINT fk_plant_type__plant_family_id FOREIGN KEY(plant_family_id) REFERENCES plant_family(id),
+			CONSTRAINT fk_plant_type__hardiness_zone_id_min FOREIGN KEY(hardiness_zone_id_min) REFERENCES hardiness_zone(id),
+			CONSTRAINT fk_plant_type__hardiness_zone_id_max FOREIGN KEY(hardiness_zone_id_max) REFERENCES hardiness_zone(id)
 		);
 
 		COMMENT ON TABLE plant_type IS 'Table to store the different types of plants.';
@@ -172,18 +178,18 @@ BEGIN
 		COMMENT ON COLUMN plant_type.sunlight_need_id_tolerated IS 
 			'Foreign key to the sunlight_need table indicating the tolerated sunlight for the plant type.';
 		COMMENT ON COLUMN plant_type.water_need_id IS 'Foreign key to the water_need table indicating the water needs for the plant type.';
-		COMMENT ON COLUMN plant_type.soil_ph_id_min IS 'The minimum soil pH that the plant type requires.';
-		COMMENT ON COLUMN plant_type.soil_ph_id_max IS 'The maximum soil pH that the plant type requires.';
+		COMMENT ON COLUMN plant_type.soil_ph_min IS 'The minimum soil pH that the plant type requires.';
+		COMMENT ON COLUMN plant_type.soil_ph_max IS 'The maximum soil pH that the plant type requires.';
 		COMMENT ON COLUMN plant_type.plant_family_id IS 
 			'Foreign key to the plant_family table indicating the family that the plant type belongs to.';
-		COMMENT ON COLUMN plant_type.perenial IS 'Boolean indicating if the plant type is a perennial (true) or annual (false) in the continental United States.';
+		COMMENT ON COLUMN plant_type.is_perennial IS 'Boolean indicating if the plant type is a perennial (true) or annual (false) in the continental United States.';
 		COMMENT ON COLUMN plant_type.hardiness_zone_id_min IS 
 			'Foreign key to the hardiness_zone table indicating the minimum hardiness zone for the plant type.';
 		COMMENT ON COLUMN plant_type.hardiness_zone_id_max IS 
 			'Foreign key to the hardiness_zone table indicating the maximum hardiness zone for the plant type.';
 
-		INSERT INTO plant_type (name, description, sunlight_need_id_preferred, sunlight_need_id_tolerated, water_need_id, soil_ph_id_min, 
-			soil_ph_id_max, plant_family_id, perenial, hardiness_zone_id_min, hardiness_zone_id_max) VALUES
+		INSERT INTO plant_type (name, description, sunlight_need_id_preferred, sunlight_need_id_tolerated, water_need_id, soil_ph_min, 
+			soil_ph_max, plant_family_id, is_perennial, hardiness_zone_id_min, hardiness_zone_id_max) VALUES
 			('Jalapeno', 'A medium-sized chili pepper with a Scoville heat range of 2,500 to 8,000.', 1, null, 2, 6.0, 7.0, 6, false, 9, 22),
 			('Zuchinni', 'A summer squash that is typically dark green.', 1, null, 2, 6.0, 7.0, 25, false, 5, 22),
 			('Carrot', 'A root vegetable that is typically orange in color.', 1, 2, 2, 6.0, 6.8, 8, false, 5, 20),
