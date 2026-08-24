@@ -31,8 +31,6 @@ public class PlantTypeV1Controller : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent, Description = "No plant types were found.")]
     public async Task<ActionResult<List<PlantTypeV1ResponseDto>>> GetAllPlantTypes()
     {
-        var random = new Random();
-
         var plantTypes = await _plantTypeService.GetAllPlantTypes();
 
         // If no plant types were found, return a 204 No Content response.
