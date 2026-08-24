@@ -1,7 +1,3 @@
-using ExampleMain.DataAccess;
-using ExampleMain.Services;
-using ExampleMain.Services.Interfaces;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,8 +7,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument();
 
-builder.Services.AddSingleton<DapperDbContext>();
-builder.Services.AddScoped<IFirstService, FirstService>();
+builder.Services.AddSingleton<ExampleMain.DataAccess.DapperDbContext>();
+ExampleMain.Services.DependencyInjection.AddServices(builder.Services);
+ExampleMain.DataAccess.DependencyInjection.AddDataAccessObjects(builder.Services);
 
 var app = builder.Build();
 

@@ -10,14 +10,14 @@ namespace ExampleMain.Web.Controllers;
 [Route("api/v1/example")]
 public class ExampleV1Controller : ControllerBase
 {
-    private readonly IFirstService _firstService;
+    private readonly IPlantTypeService _plantTypeService;
 
     /// <summary>
     /// Only constructor.
     /// </summary>
-    public ExampleV1Controller(IFirstService firstService)
+    public ExampleV1Controller(IPlantTypeService plantTypeService)
     {
-        _firstService = firstService;
+        _plantTypeService = plantTypeService;
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public class ExampleV1Controller : ControllerBase
     {
         var random = new Random();
 
-        await _firstService.DoTheThing();
+        await _plantTypeService.GetAllPlantTypes();
 
         return random.Next();
     }
