@@ -37,3 +37,30 @@ This project holds the different DataAccessObject (DAO) classes that are respons
 ### ExampleMain.BusinessLogic:
 
 This project is for shared classes that perform basic business logic.
+
+## Running the Solution
+
+### Docker
+
+1. Navigate to the .devcontainer folder in the terminal.
+2. Run docker compose up from inside of .devcontainer
+
+##  Code
+
+1. Navigate to ... in the terminal.
+2. Run the command: dotnet run --launch-profile https --project ExampleMain.Web
+
+## Database
+
+The database used by this API is PostgreSQL. It uses Flway for running and updating the schema. Flyway is setup in the docker-compose.yml file and should create the database and migrations required upon starting the Docker container locally.
+
+Here are the general rules for the scripts:
+
+1. All scripts must be placed in the Schema folder.
+2. All scripts must use the following format for their name (note the double underscore): V#__NameOfWhatIsBeingDone.sql
+3. All version numbers must be unique and the next available number must be used when a script is added.
+4. Never delete a script as this can cause issues with Flyway if somebody uses a previously existing version number. This can also cause unexpected behavior if the database gets into an unexpected state due to a change having been applied that is no longer in the scripts.
+5. Defensively check for the changes already having been applied inside of the SQL script. Flyway will handle migrations, but this will help protect us if the script is run again for some reason.
+6. If a script only changes the data inside of tables and does not change the schema, it should end with '_DML.sql'. DML stands for Data Manipulation Language. This makes it easier to tell which scripts modify the schema itself compared to those that only update the data in case there is a need to differentiate between the two.
+7. All tables must contain a generic primary key that is either an integer or a GUID/UUID that isn't necessarily related to the data itself. This makes it much easier to update the data if a unique value in the table is no longer unique.
+8. Foreign keys to a table's primary key shuould have the colon named as table_name_id.

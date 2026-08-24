@@ -1,3 +1,7 @@
+using ExampleMain.DataAccess;
+using ExampleMain.Services;
+using ExampleMain.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,9 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument();
+
+builder.Services.AddSingleton<DapperDbContext>();
+builder.Services.AddScoped<IFirstService, FirstService>();
 
 var app = builder.Build();
 
