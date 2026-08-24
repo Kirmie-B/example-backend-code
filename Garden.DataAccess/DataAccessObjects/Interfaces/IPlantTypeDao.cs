@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace ExampleMain.DataAccess.DataAccessObjects.Interfaces;
+namespace Garden.DataAccess.DataAccessObjects.Interfaces;
 
 public interface IPlantTypeDao
 {

@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExampleMain.DataAccess\ExampleMain.DataAccess.csproj" />
-    <ProjectReference Include="..\ExampleMain.Services\ExampleMain.Services.csproj" />
+    <ProjectReference Include="..\Garden.DataAccess\Garden.DataAccess.csproj" />
+    <ProjectReference Include="..\Garden.Services\Garden.Services.csproj" />
   </ItemGroup>
 
 </Project>

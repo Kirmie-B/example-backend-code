@@ -6,35 +6,35 @@ This Git repository is being created as an example of backend code based on what
 
 Below is a basic explanation of the project structure in the solution. All projects must have their own test project in the Tests folder.
 
-### ExampleMain:
+### Garden:
 
 This project contains the essential setup of the ASP.NET solution and the controllers for the API. It is responsible for creating the endpoints, documentation, and transformation of input and output for the controller and service levels of the solution.
 
-### ExampleMain.DataTransferObjects:
+### Garden.DataTransferObjects:
 
-This project contains the data transfer objects (DTO's) for the input and output of the controllers in this API. The files in this project should only be used by the ExampleMain project and anynecessary data from other layers must be converted to or from these objects at that level.
+This project contains the data transfer objects (DTO's) for the input and output of the controllers in this API. The files in this project should only be used by the Garden project and anynecessary data from other layers must be converted to or from these objects at that level.
 
-### ExampleMain.Models:
+### Garden.Models:
 
 This project contains the intermediary models that will contain data as it is used throughout the program.
 
-### ExampleMain.Services:
+### Garden.Services:
 
 This project contains the different service layer classes for the solution. This project cannot reference any DTO classes directly and cannot call any external things directly.
 
-### ExampleMain.ExternalDataTransferObjects:
+### Garden.ExternalDataTransferObjects:
 
 This project contains the various third party related DTO's for accessing external things.
 
-### ExampleMain.Repositories:
+### Garden.Repositories:
 
 This project holds the different repository level classes. These classes are responsible for calling external APIs and converting to and from the appropriate DTOs and models.
 
-### ExampleMain.DataAccess:
+### Garden.DataAccess:
 
 This project holds the different DataAccessObject (DAO) classes that are responsible for interacting with internally owned data.
 
-### ExampleMain.BusinessLogic:
+### Garden.BusinessLogic:
 
 This project is for shared classes that perform basic business logic.
 
@@ -48,7 +48,7 @@ This project is for shared classes that perform basic business logic.
 ##  Code
 
 1. Navigate to ... in the terminal.
-2. Run the command: dotnet run --launch-profile https --project ExampleMain.Web
+2. Run the command: dotnet run --launch-profile https --project Garden.Web
 
 ## Database
 

@@ -2,7 +2,7 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace ExampleMain.DataAccess;
+namespace Garden.DataAccess;
 
 /// <summary>
 /// Class for managing the creation and opening of the database connection.

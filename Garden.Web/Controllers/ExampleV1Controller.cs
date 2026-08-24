@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ExampleMain.Services.Interfaces;
+using Garden.Services.Interfaces;
 
-namespace ExampleMain.Web.Controllers;
+namespace Garden.Web.Controllers;
 
 /// <summary>
 /// Version 1 controller for Example related endpoints.

@@ -1,9 +1,9 @@
-using ExampleMain.DataAccess;
-using ExampleMain.DataAccess.DataAccessObjects.Interfaces;
-using ExampleMain.Services.Interfaces;
+using Garden.DataAccess;
+using Garden.DataAccess.DataAccessObjects.Interfaces;
+using Garden.Services.Interfaces;
 using Dapper;
 
-namespace ExampleMain.Services;
+namespace Garden.Services;
 
 /// <summary>
 /// Service class for handling operations related to plant types.

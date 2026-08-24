@@ -1,7 +1,7 @@
-using ExampleMain.DataAccess.DataAccessObjects.Interfaces;
+using Garden.DataAccess.DataAccessObjects.Interfaces;
 using System.Data;
 using Dapper;
-namespace ExampleMain.DataAccess.DataAccessObjects;
+namespace Garden.DataAccess.DataAccessObjects;
 
 /// <summary>
 /// Data access object (DAO) for database calls related to the plant_type table. 

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using ExampleMain.Services.Interfaces;
+using Garden.Services.Interfaces;
 
-namespace ExampleMain.Services;
+namespace Garden.Services;
 
 public static class DependencyInjection
 {

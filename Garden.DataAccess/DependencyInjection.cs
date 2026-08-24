@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using ExampleMain.DataAccess.DataAccessObjects;
-using ExampleMain.DataAccess.DataAccessObjects.Interfaces;
+using Garden.DataAccess.DataAccessObjects;
+using Garden.DataAccess.DataAccessObjects.Interfaces;
 
-namespace ExampleMain.DataAccess;
+namespace Garden.DataAccess;
 
 public static class DependencyInjection
 {

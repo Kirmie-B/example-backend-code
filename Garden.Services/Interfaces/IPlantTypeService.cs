@@ -1,4 +1,4 @@
-namespace ExampleMain.Services.Interfaces;
+namespace Garden.Services.Interfaces;
 
 /// <summary>
 /// Interface for the <see cref="PlantTypeService"/> class. 
