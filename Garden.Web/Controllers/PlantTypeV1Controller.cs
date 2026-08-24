@@ -23,7 +23,7 @@ public class PlantTypeV1Controller : ControllerBase
     }
 
     /// <summary>
-    /// My first example controller endpoint API.
+    /// This endpoint retrieves all plant types and returns them as a list.
     /// </summary>
     /// <returns>A list of all plant types.</returns>
     [HttpGet("all")]
