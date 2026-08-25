@@ -1,48 +1,44 @@
-﻿using Garden.DataAccess;
-using Garden.DataAccess.DataAccessObjects.Interfaces;
+﻿using Dapper;
+using Garden.DataAccess.DataAccessObjects;
 using Garden.Models;
 using Moq;
+using Moq.Dapper;
 using System.Data;
+using System.Data.Common;
 
-namespace Garden.Services.Tests;
+namespace Garden.DataAccess.Tests;
 
 /// <summary>
-/// Class containing unit tests for the <see cref="PlantTypeService"/> class. 
+/// Class containing unit tests for the <see cref="PlantTypeDao"/> class.
 /// </summary>
 [TestFixture]
-public class PlantTypeServiceTests
+public class PlantTypeDaoTests
 {
-    private readonly PlantTypeService _plantTypeService;
+    private PlantTypeDao _plantTypeDao;
 
-    private readonly Mock<IDapperDbContext> _dapperDbContextMock;
-    private readonly Mock<IPlantTypeDao> _plantTypeDaoMock;
-    private readonly Mock<IDbConnection> _dbConnectionMock;
     private readonly Mock<IDbTransaction> _dbTransactionMock;
+    private readonly Mock<DbConnection> _dbConnectionMock;
 
     /// <summary>
     /// Only constructor.
     /// </summary>
-    public PlantTypeServiceTests()
+    public PlantTypeDaoTests()
     {
-        _dapperDbContextMock = new Mock<IDapperDbContext>();
-        _plantTypeDaoMock = new Mock<IPlantTypeDao>();
-        _dbConnectionMock = new Mock<IDbConnection>();
         _dbTransactionMock = new Mock<IDbTransaction>();
+        _dbConnectionMock = new Mock<DbConnection>();
 
-        // Mock the database connection and transaction creation.
-        _dapperDbContextMock.Setup(mock => mock.DbConnection).Returns(_dbConnectionMock.Object);
-        _dbConnectionMock.Setup(mock => mock.BeginTransaction()).Returns(_dbTransactionMock.Object);
+        _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
-        _plantTypeService = new PlantTypeService(_plantTypeDaoMock.Object, _dapperDbContextMock.Object);
+        _plantTypeDao = new PlantTypeDao();
     }
 
     #region GetAllPlantTypes Tests
 
     /// <summary>
-    /// Tests that <see cref="PlantTypeService.GetAllPlantTypes"/> returns all plant types succesfully when multiple values are returned.
+    /// Tests that <see cref="PlantTypeDao.GetAllPlantTypes"/> returns all plant types succesfully when multiple values are returned.
     /// </summary>
     [Test]
-    public async Task GetAllPlantTypes_ReturnAllPlantTypes_SuccessTest()
+    public async Task GetAllPlantTypes_ReturnsAllPlantTypes_SuccessTest()
     {
         #region Setup
 
@@ -105,11 +101,27 @@ public class PlantTypeServiceTests
 
         var plantTypes = new List<PlantType>{plantType2, plantType1};
 
-        _plantTypeDaoMock.Setup(mock => mock.GetAllPlantTypes(_dbTransactionMock.Object)).ReturnsAsync(plantTypes).Verifiable(Times.Once);
+        var sqlQuery = $@"
+            SELECT 
+                id AS {nameof(PlantType.Id)},
+                name AS {nameof(PlantType.Name)},
+                description AS {nameof(PlantType.Description)},
+                sunlight_need_id_preferred AS {nameof(PlantType.SunlightNeedIdPreferred)},
+                sunlight_need_id_tolerated AS {nameof(PlantType.SunlightNeedIdTolerated)},
+                water_need_id AS {nameof(PlantType.WaterNeedId)},
+                soil_ph_min AS {nameof(PlantType.SoilPhMin)},
+                soil_ph_max AS {nameof(PlantType.SoilPhMax)},
+                plant_family_id AS {nameof(PlantType.PlantFamilyId)},
+                is_perennial AS {nameof(PlantType.IsPerennial)},
+                hardiness_zone_id_min AS {nameof(PlantType.HardinessZoneIdMin)},
+                hardiness_zone_id_max AS {nameof(PlantType.HardinessZoneIdMax)}
+            FROM plant_type";
+
+        _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<PlantType>(sqlQuery)).ReturnsAsync(plantTypes);
 
         #endregion Setup
 
-        var result = await _plantTypeService.GetAllPlantTypes();
+        var result = await _plantTypeDao.GetAllPlantTypes(_dbTransactionMock.Object);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Count, Is.EqualTo(2));
@@ -151,9 +163,6 @@ public class PlantTypeServiceTests
             Assert.That(plantType2Result.HardinessZoneIdMin, Is.EqualTo(hardinessZoneIdMin2));
             Assert.That(plantType2Result.HardinessZoneIdMax, Is.EqualTo(hardinessZoneIdMax2));
         });
-        
-        _plantTypeDaoMock.VerifyAll();
-        _dbConnectionMock.Verify(mock => mock.BeginTransaction(), Times.Once);
     }
 
     #endregion GetAllPlantTypes Tests
