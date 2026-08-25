@@ -1,7 +1,7 @@
 ﻿using Garden.Models;
 using Garden.Web.Converters;
 
-namespace Garden.Web.Tests;
+namespace Garden.Web.Tests.Converters;
 
 /// <summary>
 /// Class containing unit tests for the <see cref="PlantTypeV1ResponseDtoConverter"/> class. 
