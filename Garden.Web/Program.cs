@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument();
 
-builder.Services.AddSingleton<Garden.DataAccess.DapperDbContext>();
+builder.Services.AddSingleton<Garden.DataAccess.IDapperDbContext, Garden.DataAccess.DapperDbContext>();
 Garden.Services.DependencyInjection.AddServices(builder.Services);
 Garden.DataAccess.DependencyInjection.AddDataAccessObjects(builder.Services);
 

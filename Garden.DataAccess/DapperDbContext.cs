@@ -7,7 +7,7 @@ namespace Garden.DataAccess;
 /// <summary>
 /// Class for managing the creation and opening of the database connection.
 /// </summary>
-public class DapperDbContext
+public class DapperDbContext : IDapperDbContext
 {
     private readonly IDbConnection _dbConnection;
 

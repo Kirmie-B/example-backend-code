@@ -12,12 +12,12 @@ namespace Garden.Services;
 public class PlantTypeService : IPlantTypeService
 {
     private readonly IPlantTypeDao _plantTypeDao;
-    private readonly DapperDbContext _dbContext;
+    private readonly IDapperDbContext _dbContext;
 
     /// <summary>
     /// Only constructor.
     /// </summary>
-    public PlantTypeService(IPlantTypeDao plantTypeDao, DapperDbContext dbContext)
+    public PlantTypeService(IPlantTypeDao plantTypeDao, IDapperDbContext dbContext)
     {
         _plantTypeDao = plantTypeDao;
         _dbContext = dbContext;
