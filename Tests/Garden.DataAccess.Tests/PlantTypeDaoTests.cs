@@ -117,7 +117,10 @@ public class PlantTypeDaoTests
                 hardiness_zone_id_max AS {nameof(PlantType.HardinessZoneIdMax)}
             FROM plant_type";
 
-        _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<PlantType>(sqlQuery)).ReturnsAsync(plantTypes);
+        // Need to setup the mock separately from the verification when using SetupDapperAsync or a null reference expception occurs.
+        var mockSetup = _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<PlantType>(sqlQuery));
+        mockSetup.ReturnsAsync(plantTypes);
+        mockSetup.Verifiable(Times.Once);
 
         #endregion Setup
 
@@ -163,6 +166,9 @@ public class PlantTypeDaoTests
             Assert.That(plantType2Result.HardinessZoneIdMin, Is.EqualTo(hardinessZoneIdMin2));
             Assert.That(plantType2Result.HardinessZoneIdMax, Is.EqualTo(hardinessZoneIdMax2));
         });
+
+        // Must use Verify() instead of VerifyAll() or a null reference exception occurs from the use of SetupDapperAsync(...).
+        _dbConnectionMock.Verify();
     }
 
     #endregion GetAllPlantTypes Tests
