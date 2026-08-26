@@ -36,6 +36,18 @@ public class PlantTypeServiceTests
         _plantTypeService = new PlantTypeService(_plantTypeDaoMock.Object, _dapperDbContextMock.Object);
     }
 
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _dapperDbContextMock.VerifyAll();
+        _dbTransactionMock.VerifyAll();
+        _dbConnectionMock.VerifyAll();
+        _plantTypeDaoMock.VerifyAll();     
+    }
+
     #region GetAllPlantTypes Tests
 
     /// <summary>
