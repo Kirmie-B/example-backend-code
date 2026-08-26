@@ -29,10 +29,20 @@ public class PlantFamilyDaoTests
         _dbConnectionMock = new Mock<DbConnection>(MockBehavior.Strict);
         _dapperWrapperMock = new Mock<IDapperWrapper>(MockBehavior.Strict);
 
-        _dbConnectionMock.Setup(mock => mock.ConnectionString).Returns("FakeConnectionString");
         _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
         _plantFamilyDao = new PlantFamilyDao(_dapperWrapperMock.Object);
+    }
+
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _dapperWrapperMock.VerifyAll();
+        _dbTransactionMock.VerifyAll();
+        _dbConnectionMock.VerifyAll();        
     }
 
     #region GetAllPlantFamilies Tests
@@ -106,8 +116,6 @@ public class PlantFamilyDaoTests
             Assert.That(plantFamily2Result.Name, Is.EqualTo(name2));
             Assert.That(plantFamily2Result.Description, Is.EqualTo(description2));
         });
-
-        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllPlantFamilies Tests

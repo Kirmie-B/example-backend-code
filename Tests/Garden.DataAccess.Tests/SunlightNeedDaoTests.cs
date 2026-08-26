@@ -34,6 +34,17 @@ public class SunlightNeedDaoTests
         _SunlightNeedDao = new SunlightNeedDao(_dapperWrapperMock.Object);
     }
 
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _dapperWrapperMock.VerifyAll();
+        _dbTransactionMock.VerifyAll();
+        _dbConnectionMock.VerifyAll();        
+    }
+
     #region GetAllSunlightNeeds Tests
 
     /// <summary>
@@ -105,8 +116,6 @@ public class SunlightNeedDaoTests
             Assert.That(SunlightNeed2Result.Name, Is.EqualTo(name2));
             Assert.That(SunlightNeed2Result.Description, Is.EqualTo(description2));
         });
-
-        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllSunlightNeeds Tests

@@ -34,6 +34,17 @@ public class PlantTypeDaoTests
         _plantTypeDao = new PlantTypeDao(_dapperWrapperMock.Object);
     }
 
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _dapperWrapperMock.VerifyAll();
+        _dbTransactionMock.VerifyAll();
+        _dbConnectionMock.VerifyAll();        
+    }
+
     #region GetAllPlantTypes Tests
 
     /// <summary>
@@ -166,8 +177,6 @@ public class PlantTypeDaoTests
             Assert.That(plantType2Result.HardinessZoneIdMin, Is.EqualTo(hardinessZoneIdMin2));
             Assert.That(plantType2Result.HardinessZoneIdMax, Is.EqualTo(hardinessZoneIdMax2));
         });
-
-        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllPlantTypes Tests

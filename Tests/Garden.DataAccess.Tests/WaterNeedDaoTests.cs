@@ -34,6 +34,17 @@ public class WaterNeedDaoTests
         _waterNeedDao = new WaterNeedDao(_dapperWrapperMock.Object);
     }
 
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _dapperWrapperMock.VerifyAll();
+        _dbTransactionMock.VerifyAll();
+        _dbConnectionMock.VerifyAll();        
+    }
+
     #region GetAllWaterNeeds Tests
 
     /// <summary>
@@ -105,8 +116,6 @@ public class WaterNeedDaoTests
             Assert.That(waterNeed2Result.Name, Is.EqualTo(name2));
             Assert.That(waterNeed2Result.Description, Is.EqualTo(description2));
         });
-
-        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllWaterNeeds Tests
