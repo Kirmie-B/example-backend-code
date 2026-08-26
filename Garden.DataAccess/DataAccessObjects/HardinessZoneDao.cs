@@ -10,6 +10,16 @@ namespace Garden.DataAccess.DataAccessObjects;
 /// </summary>
 public class HardinessZoneDao : IHardinessZoneDao
 {
+    private readonly IDapperWrapper _dapperWrapper;
+
+    /// <summary>
+    /// Only constructor.
+    /// </summary>
+    public HardinessZoneDao(IDapperWrapper dapperWrapper)
+    {
+        _dapperWrapper = dapperWrapper;
+    }
+
     /// <summary>
     /// Get all hardiness zones from the database.
     /// </summary>
@@ -24,7 +34,7 @@ public class HardinessZoneDao : IHardinessZoneDao
                 description AS {nameof(HardinessZone.Description)}
             FROM hardiness_zone";
 
-        var hardinessZones= await dbTransaction.Connection!.QueryAsync<HardinessZone>(sqlQuery);
+        var hardinessZones= await _dapperWrapper.QueryAsync<HardinessZone>(dbTransaction.Connection!, sqlQuery);
         return hardinessZones.ToList();
     }
 }
