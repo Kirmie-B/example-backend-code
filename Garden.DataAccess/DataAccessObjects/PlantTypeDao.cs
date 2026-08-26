@@ -10,6 +10,16 @@ namespace Garden.DataAccess.DataAccessObjects;
 /// </summary>
 public class PlantTypeDao : IPlantTypeDao
 {
+    private readonly IDapperWrapper _dapperWrapper;
+
+    /// <summary>
+    /// Only constructor.
+    /// </summary>
+    public PlantTypeDao(IDapperWrapper dapperWrapper)
+    {
+        _dapperWrapper = dapperWrapper;
+    }
+
     /// <summary>
     /// Get all plant types from the database.
     /// </summary>
@@ -33,7 +43,7 @@ public class PlantTypeDao : IPlantTypeDao
                 hardiness_zone_id_max AS {nameof(PlantType.HardinessZoneIdMax)}
             FROM plant_type";
 
-        var plantTypes = await dbTransaction.Connection!.QueryAsync<PlantType>(sqlQuery);
+        var plantTypes = await _dapperWrapper.QueryAsync<PlantType>(dbTransaction.Connection!, sqlQuery);
         return plantTypes.ToList();
     }
 }

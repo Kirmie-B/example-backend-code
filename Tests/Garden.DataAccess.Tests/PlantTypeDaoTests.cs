@@ -16,6 +16,7 @@ public class PlantTypeDaoTests
 {
     private PlantTypeDao _plantTypeDao;
 
+    private readonly Mock<IDapperWrapper> _dapperWrapperMock;
     private readonly Mock<IDbTransaction> _dbTransactionMock;
     private readonly Mock<DbConnection> _dbConnectionMock;
 
@@ -24,12 +25,13 @@ public class PlantTypeDaoTests
     /// </summary>
     public PlantTypeDaoTests()
     {
-        _dbTransactionMock = new Mock<IDbTransaction>();
-        _dbConnectionMock = new Mock<DbConnection>();
+        _dapperWrapperMock = new Mock<IDapperWrapper>(MockBehavior.Strict);
+        _dbTransactionMock = new Mock<IDbTransaction>(MockBehavior.Strict);
+        _dbConnectionMock = new Mock<DbConnection>(MockBehavior.Strict);
 
         _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
-        _plantTypeDao = new PlantTypeDao();
+        _plantTypeDao = new PlantTypeDao(_dapperWrapperMock.Object);
     }
 
     #region GetAllPlantTypes Tests
@@ -117,10 +119,8 @@ public class PlantTypeDaoTests
                 hardiness_zone_id_max AS {nameof(PlantType.HardinessZoneIdMax)}
             FROM plant_type";
 
-        // Need to setup the mock separately from the verification when using SetupDapperAsync or a null reference expception occurs.
-        var mockSetup = _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<PlantType>(sqlQuery));
-        mockSetup.ReturnsAsync(plantTypes);
-        mockSetup.Verifiable(Times.Once);
+        _dapperWrapperMock.Setup(mock => mock.QueryAsync<PlantType>(_dbConnectionMock.Object, sqlQuery)).ReturnsAsync(plantTypes)
+            .Verifiable(Times.Once);
 
         #endregion Setup
 
@@ -167,8 +167,7 @@ public class PlantTypeDaoTests
             Assert.That(plantType2Result.HardinessZoneIdMax, Is.EqualTo(hardinessZoneIdMax2));
         });
 
-        // Must use Verify() instead of VerifyAll() or a null reference exception occurs from the use of SetupDapperAsync(...).
-        _dbConnectionMock.Verify();
+        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllPlantTypes Tests
