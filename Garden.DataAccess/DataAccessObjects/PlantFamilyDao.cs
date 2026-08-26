@@ -22,7 +22,7 @@ public class PlantFamilyDao : IPlantFamilyDao
                 id AS {nameof(PlantFamily.Id)},
                 name AS {nameof(PlantFamily.Name)},
                 description AS {nameof(PlantFamily.Description)}
-            FROM plant_families";
+            FROM plant_family";
 
         var plantFamilies= await dbTransaction.Connection!.QueryAsync<PlantFamily>(sqlQuery);
         return plantFamilies.ToList();
