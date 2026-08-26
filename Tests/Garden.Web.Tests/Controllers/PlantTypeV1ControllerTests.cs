@@ -19,7 +19,7 @@ public class PlantTypeV1ControllerTests
     /// </summary>
     public PlantTypeV1ControllerTests()
     {
-        _plantTypeServiceMock = new Mock<IPlantTypeService>();
+        _plantTypeServiceMock = new Mock<IPlantTypeService>(MockBehavior.Strict);
 
         _plantTypeController = new PlantTypeV1Controller(_plantTypeServiceMock.Object);
     }
