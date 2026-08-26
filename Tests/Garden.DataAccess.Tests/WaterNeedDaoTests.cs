@@ -16,6 +16,7 @@ public class WaterNeedDaoTests
 {
     private WaterNeedDao _waterNeedDao;
 
+    private readonly Mock<IDapperWrapper> _dapperWrapperMock;
     private readonly Mock<IDbTransaction> _dbTransactionMock;
     private readonly Mock<DbConnection> _dbConnectionMock;
 
@@ -24,12 +25,13 @@ public class WaterNeedDaoTests
     /// </summary>
     public WaterNeedDaoTests()
     {
-        _dbTransactionMock = new Mock<IDbTransaction>();
-        _dbConnectionMock = new Mock<DbConnection>();
+        _dapperWrapperMock = new Mock<IDapperWrapper>(MockBehavior.Strict);
+        _dbTransactionMock = new Mock<IDbTransaction>(MockBehavior.Strict);
+        _dbConnectionMock = new Mock<DbConnection>(MockBehavior.Strict);
 
         _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
-        _waterNeedDao = new WaterNeedDao();
+        _waterNeedDao = new WaterNeedDao(_dapperWrapperMock.Object);
     }
 
     #region GetAllWaterNeeds Tests
@@ -72,12 +74,10 @@ public class WaterNeedDaoTests
                 id AS {nameof(WaterNeed.Id)},
                 name AS {nameof(WaterNeed.Name)},
                 description AS {nameof(WaterNeed.Description)}
-            FROM Water_need";
+            FROM water_need";
 
-        // Need to setup the mock separately from the verification when using SetupDapperAsync or a null reference expception occurs.
-        var mockSetup = _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<WaterNeed>(sqlQuery));
-        mockSetup.ReturnsAsync(waterNeeds);
-        mockSetup.Verifiable(Times.Once);
+        _dapperWrapperMock.Setup(mock => mock.QueryAsync<WaterNeed>(_dbConnectionMock.Object, sqlQuery)).ReturnsAsync(waterNeeds)
+            .Verifiable(Times.Once);
 
         #endregion Setup
 
@@ -106,8 +106,7 @@ public class WaterNeedDaoTests
             Assert.That(waterNeed2Result.Description, Is.EqualTo(description2));
         });
 
-        // Must use Verify() instead of VerifyAll() or a null reference exception occurs from the use of SetupDapperAsync(...).
-        _dbConnectionMock.Verify();
+        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllWaterNeeds Tests
