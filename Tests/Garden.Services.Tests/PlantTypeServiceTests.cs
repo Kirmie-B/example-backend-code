@@ -46,7 +46,7 @@ public class PlantTypeServiceTests
         _dapperDbContextMock.VerifyAll();
         _dbTransactionMock.VerifyAll();
         _dbConnectionMock.VerifyAll();
-        _plantTypeDaoMock.VerifyAll();     
+        _plantTypeDaoMock.VerifyAll();
     }
 
     #region GetAllPlantTypes Tests

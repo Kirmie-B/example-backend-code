@@ -75,9 +75,35 @@ All tests must be in the Tests folder in a project that begins with the name of 
 
 1. All mocks should be verified if possible. Ensuring the mocked function was called/not called the expected number of times can help prevent a number of issues.
 2. Each class being tested should have its own test class.
-3. Use regions to separate the different functions being tested. This allows collapsing the code to quickly jump between areas.
-4. Use regions to surround the setup for each test. This makes it easy to jump straight to the call of the tested function and the Assert calls.
+3. Group tests for a function in a region. This can help people to easily jump to specific areas and also helps to keep things grouped properly.
+4. Use a region called Setup for the "arrange" section of a test rather than marking each section with Arrange, Act, and Assert comments. It is less lines of code, allows for colapsing the setup and jumping straight to the Act section, and proper unit tests should only have onle line of code for the Act section immediately followed by the Assert section so there isn't much need to specify them.
 5. Each unit tests should only test one function as much as posible to limit their scope.
 6. Reference type variables that are passed into the tested function cannot be used for Assert checks at the end of the test. These reference type variables can be changed by the tested code and therefore cannot be trusted to be accurate. Typically resulting in false positive results.
-7. It.IsAny<T>() should be avoided whenver possible. Using that can result in bad values being considered as correct and resulting in false positive results.
+7. It.IsAny<T>() should be avoided whenver possible. Using that can result in bad values being considered as correct, resulting in false positive results.
 8. Using Assert.Multiple(...) is great, but don't check if a variable is null inside this right before checking a bunch of that same values properties in there as well. The null check should be performed outside as all of the other checks will either fail because the value is null or result in a false positive if the specific value was supposed to be null and the ? operator was used.
+9. Limit the focus of a unit test to a single function. The main exception of this would be calls to static functions that cannot be mocked. When a static function is present, the unit test should try to limit the amount of scenarios going though that static function as it should be tested thuroughly on its own elsewhere.
+10. All mocks should have Mock on the end of their name for clarity.
+11. Use VerifyAll() whenever possible. This ensures that all setups were used as well as ensuring that any Verifiable(...) settings were valid.
+12. Use Verifiable(...) with exact call counts whenver possible. This can help catch unexpected looping.
+13. Use MockBehavior.Strict whenver possible. This helps to ensure that all calls are mocked properly. It can also help to alert you to unexpected underlying calls on some objects.
+14. The XML comments for each test function should include a <see cref="..."/> to the function being tested. Seeing a squiggly line under one of these can help alert people to the fact that the test may be out of date.
+
+## Code Rules
+
+There are a number of rules that should be followed when writing code in this solution. They are:
+
+1. All things must have an access modifier explicitly set for clarity.
+2. All public things must have XML comments.
+3. Controller endpoints and DTO's cannot use <see cref="..."/> or other tags as Swagger does not handle this appropriately.
+4. When naming things, accronyms should be treated as a single word when it comes to capitalization. For example, ThingIdDto instead of ThingIDDTO.
+5. All functions must be named using PascalCase. This applies to all access modifiers. Example: CreateDtoName.
+6. All private fields must be named using _camelCase. Even if constant. Example: _exampleV1DtoMock.
+7. All non-private fiels must be named using PascalCase. Even if constant. Example: ExampleV1DtoMock.
+8. All disposable types must be disposed. Preferablly by wrapping them in a using call.
+9. No single letter names outside of extremely well known and basic ones like i in a for loop. All other names should be descriptive.
+10. Use descriptive names that match what the object is. Names like result should only be used for things that are literally called result. The exception to this rule is in unit tests where the return of the tested function may be called result for simplicty.
+11. If and else bodies may exclude {}'s as long as the body is only one one line (a single line of code that spans 2 lines does not count), but the final body shuold have a blank line after it for beter readability.
+12. Prefer readability over shorter code. Using complicated lambdas for something may get the job done, but sometimes writing it out can be easier to understand. They can also be easier to step through and debug.
+13. Avoid very simple XML comments like "The thing ID." for thingId. The reason for the comments is to try to give more information than is present in the name itself. "The ID of the thing to look for." is only a few more words and can be much more helpful to both people and AI.
+14. XML comments for controller endpoints and DTOs must be descriptive. The purpose of these comments are for people who need to use them and may not have access to the code. Having better comments here can reduce the number of issues those people will face.
+15. All regions must be named and their endregion must have that same name. This makes it much easier to tell where each region ends when there are multiple regions.
