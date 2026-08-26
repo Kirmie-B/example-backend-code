@@ -24,14 +24,15 @@ public class PlantTypeServiceTests
     /// </summary>
     public PlantTypeServiceTests()
     {
-        _dapperDbContextMock = new Mock<IDapperDbContext>();
-        _plantTypeDaoMock = new Mock<IPlantTypeDao>();
-        _dbConnectionMock = new Mock<IDbConnection>();
-        _dbTransactionMock = new Mock<IDbTransaction>();
+        _dapperDbContextMock = new Mock<IDapperDbContext>(MockBehavior.Strict);
+        _plantTypeDaoMock = new Mock<IPlantTypeDao>(MockBehavior.Strict);
+        _dbConnectionMock = new Mock<IDbConnection>(MockBehavior.Strict);
+        _dbTransactionMock = new Mock<IDbTransaction>(MockBehavior.Strict);
 
         // Mock the database connection and transaction creation.
         _dapperDbContextMock.Setup(mock => mock.DbConnection).Returns(_dbConnectionMock.Object);
         _dbConnectionMock.Setup(mock => mock.BeginTransaction()).Returns(_dbTransactionMock.Object);
+        _dbTransactionMock.Setup(mock => mock.Dispose());
 
         _plantTypeService = new PlantTypeService(_plantTypeDaoMock.Object, _dapperDbContextMock.Object);
     }
