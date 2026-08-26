@@ -16,6 +16,7 @@ public class PlantFamilyDaoTests
 {
     private PlantFamilyDao _plantFamilyDao;
 
+    private readonly Mock<IDapperWrapper> _dapperWrapperMock;
     private readonly Mock<IDbTransaction> _dbTransactionMock;
     private readonly Mock<DbConnection> _dbConnectionMock;
 
@@ -24,12 +25,14 @@ public class PlantFamilyDaoTests
     /// </summary>
     public PlantFamilyDaoTests()
     {
-        _dbTransactionMock = new Mock<IDbTransaction>();
-        _dbConnectionMock = new Mock<DbConnection>();
+        _dbTransactionMock = new Mock<IDbTransaction>(MockBehavior.Strict);
+        _dbConnectionMock = new Mock<DbConnection>(MockBehavior.Strict);
+        _dapperWrapperMock = new Mock<IDapperWrapper>(MockBehavior.Strict);
 
+        _dbConnectionMock.Setup(mock => mock.ConnectionString).Returns("FakeConnectionString");
         _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
-        _plantFamilyDao = new PlantFamilyDao();
+        _plantFamilyDao = new PlantFamilyDao(_dapperWrapperMock.Object);
     }
 
     #region GetAllPlantFamilies Tests
@@ -74,10 +77,8 @@ public class PlantFamilyDaoTests
                 description AS {nameof(PlantFamily.Description)}
             FROM plant_family";
 
-        // Need to setup the mock separately from the verification when using SetupDapperAsync or a null reference expception occurs.
-        var mockSetup = _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<PlantFamily>(sqlQuery));
-        mockSetup.ReturnsAsync(plantFamilies);
-        mockSetup.Verifiable(Times.Once);
+        _dapperWrapperMock.Setup(mock => mock.QueryAsync<PlantFamily>(_dbConnectionMock.Object, sqlQuery)).ReturnsAsync(plantFamilies)
+            .Verifiable(Times.Once);
 
         #endregion Setup
 
@@ -106,8 +107,7 @@ public class PlantFamilyDaoTests
             Assert.That(plantFamily2Result.Description, Is.EqualTo(description2));
         });
 
-        // Must use Verify() instead of VerifyAll() or a null reference exception occurs from the use of SetupDapperAsync(...).
-        _dbConnectionMock.Verify();
+        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllPlantFamilies Tests

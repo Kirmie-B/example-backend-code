@@ -8,6 +8,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDataAccessObjects(this IServiceCollection services)
     {
+        services.AddScoped<IDapperWrapper, DapperWrapper>();
+
+        // Add data acces objects
         services.AddScoped<IPlantTypeDao, PlantTypeDao>();
         
         return services;

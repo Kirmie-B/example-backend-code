@@ -10,6 +10,16 @@ namespace Garden.DataAccess.DataAccessObjects;
 /// </summary>
 public class PlantFamilyDao : IPlantFamilyDao
 {
+    private readonly IDapperWrapper _dapperWrapper;
+
+    /// <summary>
+    /// Only constructor.
+    /// </summary>
+    public PlantFamilyDao(IDapperWrapper dapperWrapper)
+    {
+        _dapperWrapper = dapperWrapper;
+    }
+
     /// <summary>
     /// Get all plant families from the database.
     /// </summary>
@@ -23,8 +33,9 @@ public class PlantFamilyDao : IPlantFamilyDao
                 name AS {nameof(PlantFamily.Name)},
                 description AS {nameof(PlantFamily.Description)}
             FROM plant_family";
-
-        var plantFamilies= await dbTransaction.Connection!.QueryAsync<PlantFamily>(sqlQuery);
+;
+        var plantFamilies = await _dapperWrapper.QueryAsync<PlantFamily>(dbTransaction.Connection!, sqlQuery);
+        
         return plantFamilies.ToList();
     }
 }
