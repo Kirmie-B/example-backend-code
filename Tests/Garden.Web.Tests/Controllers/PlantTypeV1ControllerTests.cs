@@ -24,6 +24,15 @@ public class PlantTypeV1ControllerTests
         _plantTypeController = new PlantTypeV1Controller(_plantTypeServiceMock.Object);
     }
 
+    /// <summary>
+    /// Function that is run after each test.
+    /// </summary>
+    [TearDown]
+    public void TearDown()
+    {
+        _plantTypeServiceMock.VerifyAll();      
+    }
+
     #region GetAllPlantTypes Tests
 
     /// <summary>
@@ -166,8 +175,6 @@ public class PlantTypeV1ControllerTests
         
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Result, Is.TypeOf<NoContentResult>());
-
-        _plantTypeServiceMock.VerifyAll();
     }
 
     #endregion GetAllPlantTypes Tests
