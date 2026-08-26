@@ -10,6 +10,16 @@ namespace Garden.DataAccess.DataAccessObjects;
 /// </summary>
 public class SunlightNeedDao : ISunlightNeedDao
 {
+    private readonly IDapperWrapper _dapperWrapper;
+
+    /// <summary>
+    /// Only constructor.
+    /// </summary>
+    public SunlightNeedDao(IDapperWrapper dapperWrapper)
+    {
+        _dapperWrapper = dapperWrapper;
+    }
+
     /// <summary>
     /// Get all sunlight needs from the database.
     /// </summary>
@@ -24,7 +34,7 @@ public class SunlightNeedDao : ISunlightNeedDao
                 description AS {nameof(SunlightNeed.Description)}
             FROM sunlight_need";
 
-        var sunlightNeeds = await dbTransaction.Connection!.QueryAsync<SunlightNeed>(sqlQuery);
+        var sunlightNeeds = await _dapperWrapper.QueryAsync<SunlightNeed>(dbTransaction.Connection!, sqlQuery);
         return sunlightNeeds.ToList();
     }
 }

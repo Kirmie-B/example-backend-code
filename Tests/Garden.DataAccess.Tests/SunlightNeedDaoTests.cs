@@ -16,6 +16,7 @@ public class SunlightNeedDaoTests
 {
     private SunlightNeedDao _SunlightNeedDao;
 
+    private readonly Mock<IDapperWrapper> _dapperWrapperMock;
     private readonly Mock<IDbTransaction> _dbTransactionMock;
     private readonly Mock<DbConnection> _dbConnectionMock;
 
@@ -24,12 +25,13 @@ public class SunlightNeedDaoTests
     /// </summary>
     public SunlightNeedDaoTests()
     {
-        _dbTransactionMock = new Mock<IDbTransaction>();
-        _dbConnectionMock = new Mock<DbConnection>();
+        _dapperWrapperMock = new Mock<IDapperWrapper>(MockBehavior.Strict);
+        _dbTransactionMock = new Mock<IDbTransaction>(MockBehavior.Strict);
+        _dbConnectionMock = new Mock<DbConnection>(MockBehavior.Strict);
 
         _dbTransactionMock.Setup(mock => mock.Connection).Returns(_dbConnectionMock.Object);
 
-        _SunlightNeedDao = new SunlightNeedDao();
+        _SunlightNeedDao = new SunlightNeedDao(_dapperWrapperMock.Object);
     }
 
     #region GetAllSunlightNeeds Tests
@@ -65,7 +67,7 @@ public class SunlightNeedDaoTests
             Description = description2,
         };
 
-        var SunlightNeeds = new List<SunlightNeed>{SunlightNeed2, SunlightNeed1};
+        var sunlightNeeds = new List<SunlightNeed>{SunlightNeed2, SunlightNeed1};
 
         var sqlQuery = $@"
             SELECT 
@@ -74,10 +76,8 @@ public class SunlightNeedDaoTests
                 description AS {nameof(SunlightNeed.Description)}
             FROM sunlight_need";
 
-        // Need to setup the mock separately from the verification when using SetupDapperAsync or a null reference expception occurs.
-        var mockSetup = _dbConnectionMock.SetupDapperAsync(mock => mock.QueryAsync<SunlightNeed>(sqlQuery));
-        mockSetup.ReturnsAsync(SunlightNeeds);
-        mockSetup.Verifiable(Times.Once);
+        _dapperWrapperMock.Setup(mock => mock.QueryAsync<SunlightNeed>(_dbConnectionMock.Object, sqlQuery)).ReturnsAsync(sunlightNeeds)
+            .Verifiable(Times.Once);
 
         #endregion Setup
 
@@ -106,8 +106,7 @@ public class SunlightNeedDaoTests
             Assert.That(SunlightNeed2Result.Description, Is.EqualTo(description2));
         });
 
-        // Must use Verify() instead of VerifyAll() or a null reference exception occurs from the use of SetupDapperAsync(...).
-        _dbConnectionMock.Verify();
+        _dapperWrapperMock.VerifyAll();
     }
 
     #endregion GetAllSunlightNeeds Tests
